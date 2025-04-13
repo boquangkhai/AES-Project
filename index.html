@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Encryption & Decryption</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>AES Encryption</h2>
+        <input type="text" id="plaintext" placeholder="Nhập Plaintext"></input>
+        <input type="text" id="key" placeholder="Nhập key">
+        <span class="keyToBinary">Nhị phân (128 bit): </span>
+        <button id="encryptBtn">Mã hóa</button>
+        <input type="text" id="encrypted" placeholder="Kết quả" readonly></input>
+
+        
+    </div>
+    
+    <div class="container">
+        <h2>AES Decryption</h2>
+        <input type="text" id="encryptedInput" placeholder="Nhập Ciphertext"></input>
+        <input type="text" id="keyDecrypt" placeholder="Nhập key">
+        <span class="keyToBinary">Nhị phân (128 bit): </span>
+        <button id="decryptBtn">Giải mã</button>
+        <input type="text" id="decrypted" placeholder="Kết quả" readonly></input>
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+</html>
