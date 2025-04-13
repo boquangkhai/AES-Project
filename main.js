@@ -1,34 +1,45 @@
-var keytext = document.getElementById('key')
-var keyDecrypt = document.getElementById('keyDecrypt')
-var buttonEncrypt = document.getElementById('encryptBtn')
-var keyToBinary = document.getElementsByClassName('keyToBinary')
+var keytext = document.getElementById('key');
+var keyDecrypt = document.getElementById('keyDecrypt');
+var keyToBinary = document.getElementsByClassName('keyToBinary');
 
-function stringToBinaryKey(str) {
-    const encoder = new TextEncoder(); 
-    const binaryKey = encoder.encode(str); 
-    return binaryKey;
+function validateKeyInput(inputElement) {
+    const original = inputElement.value;
+    const filtered = original.replace(/[^a-zA-Z0-9]/g, '');
+
+    if (original !== filtered) {
+        alert("Key chỉ được chứa chữ và số!");
+        inputElement.value = filtered;
+    }
 }
 
-function normalizeKey(keyStr, length = 16) {
+function convertToHex(inputElement, displayElementIndex) {
+    keyToBinary[displayElementIndex].innerHTML = "Hexa (128 bit): ";
+    const key = inputElement.value;
     const encoder = new TextEncoder();
-    let keyBytes = encoder.encode(keyStr);
-    if (keyBytes.length > length) {
-        keyBytes = keyBytes.slice(0, length); 
-    } else if (keyBytes.length < length) {
-        const padded = new Uint8Array(length);
-        padded.set(keyBytes); 
+    let keyBytes = encoder.encode(key);
+
+    if (keyBytes.length > 16) {
+        keyBytes = keyBytes.slice(0, 16);
+    } else if (keyBytes.length < 16) {
+        const padded = new Uint8Array(16);
+        padded.set(keyBytes);
         keyBytes = padded;
     }
 
-    return keyBytes;
+    const hexString = Array.from(keyBytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join(' ')
+        .toUpperCase();
+
+    keyToBinary[displayElementIndex].innerHTML += hexString;
 }
 
-function convertToBinary(inputElement, displayElementIndex) {
-    keyToBinary[displayElementIndex].innerHTML = "Nhị phân (128 bit): ";
-    const key = inputElement.value;
-    const binaryKey = stringToBinaryKey(key);
-    keyToBinary[displayElementIndex].innerHTML += Array.from(normalizeKey(binaryKey)).join(' ');
-}
+keytext.oninput = () => {
+    validateKeyInput(keytext);
+    convertToHex(keytext, 0);
+};
 
-keytext.onchange = () => convertToBinary(keytext, 0);
-keyDecrypt.onchange = () => convertToBinary(keyDecrypt, 1);
+keyDecrypt.oninput = () => {
+    validateKeyInput(keyDecrypt);
+    convertToHex(keyDecrypt, 1);
+};
